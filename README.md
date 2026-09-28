@@ -1,4 +1,4 @@
-# utkualbayrak.dev
+# [utkualbayrak.dev](https://utkualbayrak.dev)
 
 🇬🇧 [English](#english) · 🇹🇷 [Türkçe](#türkçe)
 
@@ -30,6 +30,8 @@ It's a small joke, but there's a real point underneath: knowing a lot of tools a
 ### Run it locally
 
 Open `index.html` in a browser. That's it.
+
+Or visit [utkualbayrak.dev](https://utkualbayrak.dev)
 
 ### The honest part
 
@@ -63,6 +65,8 @@ Küçük bir şaka ama altında gerçek bir fikir var: çok araç bilmek, ne zam
 ### Yerelde çalıştırmak
 
 `index.html` dosyasını tarayıcıda aç. Bu kadar.
+
+Ya da [utkualbayrak.dev](https://utkualbayrak.dev) ziyaret et.
 
 ### İtiraf kısmı
 
