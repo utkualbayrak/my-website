@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Utku Albayrak - Frontend Dev</title>
+<meta name="description" content="Utku Albayrak, Frontend Dev (Angular), Ankara.">
+<style>
+:root {
+  --bg: #ffffff;
+  --fg: #000000;
+  --link: #0000ee;
+  --visited: #551a8b;
+  --muted: #555555;
+  --counter-bg: #000000;
+  --counter-fg: #33ff33;
+  --stripe-a: #ffd400;
+  --stripe-b: #000000;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #000000;
+    --fg: #f2f2f2;
+    --link: #66ccff;
+    --visited: #cc99ff;
+    --muted: #aaaaaa;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #000000;
+  --fg: #f2f2f2;
+  --link: #66ccff;
+  --visited: #cc99ff;
+  --muted: #aaaaaa;
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0 auto;
+  max-width: 680px;
+  padding: 24px 18px 96px;
+  background: var(--bg);
+  color: var(--fg);
+  font: 18px/1.6 "Times New Roman", Times, Georgia, serif;
+  overflow-x: hidden;
+}
+a { color: var(--link); }
+a:visited { color: var(--visited); }
+a:focus-visible, button:focus-visible { outline: 3px dashed #ff00ff; outline-offset: 3px; }
+h1 { font-size: 2.6rem; line-height: 1.1; margin: 0.2em 0 0.1em; }
+h2 { font-size: 1.4rem; margin: 1.8em 0 0.4em; }
+h3 { font-size: 1.1rem; margin: 1.2em 0 0.2em; }
+p, li { margin: 0.4em 0; }
+ul { padding-left: 1.3em; }
+.muted { color: var(--muted); }
+.stack { font-size: 0.9rem; color: var(--muted); }
+
+/* ---------- the tacky stuff ---------- */
+.construction {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 6px 10px; margin-bottom: 14px;
+  background: repeating-linear-gradient(45deg, var(--stripe-a) 0 16px, var(--stripe-b) 16px 32px);
+  background-size: 45px 45px;
+  font: bold 15px/1.3 "Comic Sans MS", "Comic Neue", "Chalkboard SE", cursive;
+}
+.construction span.label { background: var(--stripe-a); color: #000; padding: 2px 8px; border: 2px solid #000; }
+.spin { display: inline-block; }
+
+.rainbow {
+  font-family: "Comic Sans MS", "Comic Neue", "Chalkboard SE", cursive;
+  text-shadow: 2px 2px 0 rgba(128, 128, 128, 0.45);
+}
+.wave span { display: inline-block; }
+
+marquee { display: block; font: bold 16px/1.8 "Courier New", Courier, monospace; color: #ff0066; border-top: 2px dotted currentColor; border-bottom: 2px dotted currentColor; margin: 10px 0 18px; }
+
+hr.fancy {
+  border: 0; height: 6px; margin: 28px 0;
+  background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+  background-size: 200% 100%;
+}
+
+.new {
+  display: inline-block; font: bold 12px/1 Arial, Helvetica, sans-serif;
+  background: #ff0000; color: #ffff00; padding: 3px 5px; vertical-align: middle;
+  transform: rotate(-8deg);
+}
+
+.skills-marquee { font-family: "Courier New", Courier, monospace; font-size: 15px; color: var(--fg); border: 0; margin: 6px 0; }
+
+.counter { display: inline-flex; gap: 2px; vertical-align: middle; }
+.counter b {
+  background: var(--counter-bg); color: var(--counter-fg);
+  font: bold 18px/1 "Courier New", Courier, monospace;
+  padding: 4px 5px; border: 1px solid #444;
+}
+
+footer { margin-top: 40px; text-align: center; font-size: 14px; }
+footer .badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 12px 0; }
+footer .badge {
+  font: bold 11px/1.2 Verdana, Geneva, sans-serif; padding: 4px 6px;
+  border: 2px outset #c0c0c0; background: #c0c0c0; color: #000;
+}
+
+.retro-btn {
+  position: fixed; bottom: 0; z-index: 10;
+  margin-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  font: bold 13px/1 Verdana, Geneva, sans-serif;
+  background: #c0c0c0; color: #000; border: 3px outset #ffffff; padding: 8px 10px; cursor: pointer;
+}
+.retro-btn:active { border-style: inset; }
+#chaos-toggle { right: 12px; }
+#theme-toggle { left: 12px; }
+
+.sparkle {
+  position: fixed; pointer-events: none; z-index: 9;
+  font-size: 16px; line-height: 1;
+  animation: sparkle-fall 900ms ease-out forwards;
+}
+
+/* animations only run while chaos is on */
+body.chaos .spin { animation: spin 2s linear infinite; }
+body.chaos .wave span { animation: wave 1.2s ease-in-out infinite, letter-rainbow 2.1s linear infinite; }
+body.chaos .blink { animation: blink 1s steps(1) infinite; }
+body.chaos hr.fancy { animation: rainbow 2s linear infinite; }
+body.chaos .construction { animation: stripes 1s linear infinite; }
+body.chaos .wobble { display: inline-block; animation: wobble 2.4s ease-in-out infinite; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes rainbow { to { background-position: 300% 0; } }
+@keyframes letter-rainbow {
+  0%, 100% { color: #ff0000; }
+  14% { color: #ff9900; }
+  28% { color: #e6c200; }
+  42% { color: #22cc00; }
+  57% { color: #00aaff; }
+  71% { color: #6633ff; }
+  85% { color: #ff00ff; }
+}
+@keyframes wave { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes blink { 50% { visibility: hidden; } }
+@keyframes stripes { to { background-position: 45px 0; } }
+@keyframes wobble { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg) scale(1.05); } }
+@keyframes sparkle-fall {
+  from { opacity: 1; transform: translate(0, 0) scale(1); }
+  to { opacity: 0; transform: translate(var(--dx), 40px) scale(0.3) rotate(180deg); }
+}
+
+@media (max-width: 480px) {
+  body { font-size: 17px; }
+  h1 { font-size: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="construction" role="note">
+  <span class="spin" aria-hidden="true">🚧</span>
+  <span class="label">THIS SITE IS ALWAYS UNDER CONSTRUCTION</span>
+  <span class="spin" aria-hidden="true">🚧</span>
+</div>
+
+<header>
+  <h1 class="rainbow wave" id="name" aria-label="Utku Albayrak">Utku Albayrak</h1>
+  <p><strong>Frontend Lead</strong> building enterprise Angular apps for factories. Ankara, Türkiye.</p>
+</header>
+
+<marquee scrollamount="6" aria-hidden="true">★ WELCOME TO MY HOMEPAGE!!! ★ YOU ARE READING A CV WITH NO FRAMEWORK AND NO BUILD STEP ★ YES, I KNOW ANGULAR ★ PLEASE SIGN MY GUESTBOOK (EMAIL ME) ★</marquee>
+
+<p>Nearly 4 years of building Angular applications for industrial clients. I design micro-frontend architectures with NX and Module Federation, build real-time production systems, and lead a frontend team while working closely with backend, DevOps and clients. Self-taught, with an academic background in labour economics.</p>
+
+<p>
+  <a href="mailto:utkualbayrakrak@gmail.com"><span class="spin" aria-hidden="true">📧</span> Email me</a> ·
+  <a href="https://www.linkedin.com/in/utkualbayrak">LinkedIn</a> ·
+  <a href="https://github.com/utkualbayrak">GitHub</a>
+</p>
+
+<hr class="fancy">
+
+<h2><span class="wobble">Skills</span></h2>
+<marquee class="skills-marquee" behavior="alternate" scrollamount="4" aria-hidden="true">TypeScript ✦ Angular ✦ NgRx ✦ RxJS ✦ NX ✦ Module Federation ✦ WebSocket</marquee>
+<ul>
+  <li><strong>Languages:</strong> TypeScript, JavaScript, HTML, CSS/SASS</li>
+  <li><strong>Frameworks:</strong> Angular; familiar with React and Next.js</li>
+  <li><strong>State and libraries:</strong> NgRx (Store, Signal Store), RxJS, PrimeNG, Angular Material, TailwindCSS, ECharts, GridStack.js, Leaflet</li>
+  <li><strong>Architecture:</strong> micro-frontends, Module Federation, NX monorepo, RBAC, WebSocket</li>
+  <li><strong>Tools:</strong> Git, GitLab, Jenkins, Docker, Rancher, Cloudflare, Keycloak, ESLint, Prettier, Husky, Swagger/OpenAPI, Orval, Figma, Jira</li>
+  <li><strong>AI tools:</strong> Claude Code, GitHub Copilot</li>
+</ul>
+
+<hr class="fancy">
+
+<h2><span class="wobble">Experience</span></h2>
+
+<h3>VBT Software</h3>
+<p class="muted">Frontend Developer, then Frontend Lead. Dec 2022 to present.</p>
+
+<h3>KARDEMİR S3-UYS Production Management System <span class="new blink">NEW!</span></h3>
+<p class="muted">Frontend Lead. Apr 2025 to present.</p>
+<ul>An end-to-end MES for one of Türkiye's major iron and steel producers, covering everything from steelmaking to rails, railway wheels and rebar. Field operators, foremen, engineers and coordinators use it every day.</ul>
+
+<ul class="stack">Angular 20, NX, Module Federation, NgRx Signal Store, PrimeNG, TailwindCSS, Keycloak, Orval, WebSocket, GridStack.js, ECharts, GitLab, Jenkins, Docker, Rancher</ul>
+
+<h3>MAN Truck &amp; Bus Process Tracking System</h3>
+<p class="muted">Frontend Developer. Jan 2023 to Apr 2025.</p>
+<ul>Task and order tracking used across nearly every department of MAN's Ankara bus plant.</ul>
+<ul class="stack">Angular 15, NgRx, RxJS, PrimeNG, ECharts, NX, Module Federation</ul>
+
+<hr class="fancy">
+
+<h2><span class="wobble">Side project</span></h2>
+<p><a href="https://ngx-form-utils.utkualbayrak.dev/">ngx-form-utils</a>: a zero-dependency Angular library that turns any DTO into a fully typed Reactive FormGroup in one call, with complete TypeScript inference.</p>
+
+<h2><span class="wobble">Trainings I gave</span></h2>
+<ul>
+  <li>Angular, NX and codebase training for 25 KARDEMİR IT staff (2025)</li>
+  <li>Frontend and codebase handover training for the Verona project (2025)</li>
+</ul>
+
+<h2><span class="wobble">Education</span></h2>
+<ul>
+  <li>M.A., Labour Economics, Ankara University, 2018 to 2021 (not completed)</li>
+  <li>B.A., Labour Economics and Industrial Relations, Ankara University, 2014 to 2018</li>
+  <li>Physics Engineering, Hacettepe University, 2009 to 2014 (not completed)</li>
+</ul>
+
+<hr class="fancy">
+
+<footer>
+  <p>You are visitor number <span class="counter" id="counter" aria-live="off"></span></p>
+  <div class="badges" aria-hidden="true">
+    <span class="badge">Best viewed in Netscape Navigator 4</span>
+    <span class="badge">800 × 600</span>
+    <span class="badge">Made with Notepad</span>
+    <span class="badge">No cookies. Only chaos.</span>
+  </div>
+  <p class="muted">© 1991–2026 Utku Albayrak. Last updated: whenever.</p>
+   <p class="footnote" id="footnote">* This page is one plain HTML file. No framework, no build step, no dependencies. Then I deployed it to Cloudflare, and it needed a pile of .json and .js files to go live. I tried to escape JavaScript. JavaScript found me anyway.</p>
+</footer>
+
+<button id="theme-toggle" class="retro-btn" type="button">another dark mode btn</button>
+<button id="chaos-toggle" class="retro-btn" type="button" aria-pressed="true">Turn off the chaos</button>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.getElementById('chaos-toggle');
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Wave letters in the name
+  var nameEl = document.getElementById('name');
+  var text = nameEl.textContent;
+  nameEl.textContent = '';
+  for (var i = 0; i < text.length; i++) {
+    var s = document.createElement('span');
+    s.setAttribute('aria-hidden', 'true');
+    s.textContent = text[i] === ' ' ? '\u00a0' : text[i];
+    s.style.animationDelay = (i * 0.08) + 's, ' + (-i * 0.15) + 's';
+    s.style.color = 'hsl(' + Math.round(i * 360 / text.length) + ', 90%, 48%)';
+    nameEl.appendChild(s);
+  }
+
+  // Dark mode toggle
+  var root = document.documentElement;
+  var themeBtn = document.getElementById('theme-toggle');
+  var darkQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+  function isDark() {
+    var t = root.getAttribute('data-theme');
+    if (t) return t === 'dark';
+    return !!(darkQuery && darkQuery.matches);
+  }
+  try {
+    var savedTheme = localStorage.getItem('utku-theme');
+    if (savedTheme === 'dark' || savedTheme === 'light') root.setAttribute('data-theme', savedTheme);
+  } catch (e) {}
+  function syncThemeBtn() { themeBtn.setAttribute('aria-pressed', isDark() ? 'true' : 'false'); }
+  syncThemeBtn();
+  themeBtn.addEventListener('click', function () {
+    var next = isDark() ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('utku-theme', next); } catch (e) {}
+    syncThemeBtn();
+  });
+
+  // Scrolling title bar, the way nature intended
+  var baseTitle = '*** Utku Albayrak - Frontend Lead - Welcome!!! ***   ';
+  var titleText = baseTitle, titleTimer = null;
+  function startTitle() {
+    if (titleTimer) return;
+    titleTimer = setInterval(function () {
+      titleText = titleText.slice(1) + titleText[0];
+      document.title = titleText;
+    }, 180);
+  }
+  function stopTitle() {
+    clearInterval(titleTimer); titleTimer = null;
+    document.title = 'Utku Albayrak - Frontend Lead';
+  }
+
+  // Marquees
+  var marquees = document.querySelectorAll('marquee');
+  function setMarquees(on) {
+    marquees.forEach(function (m) { try { on ? m.start() : m.stop(); } catch (e) {} });
+  }
+
+  // Cursor sparkle trail
+  var glyphs = ['✨', '⭐', '💫', '✦', '★'];
+  var last = 0;
+  function sparkle(x, y) {
+    var now = Date.now();
+    if (now - last < 40) return;
+    last = now;
+    var el = document.createElement('span');
+    el.className = 'sparkle';
+    el.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+    el.style.left = (x + 6) + 'px';
+    el.style.top = (y + 6) + 'px';
+    el.style.setProperty('--dx', (Math.random() * 40 - 20) + 'px');
+    body.appendChild(el);
+    setTimeout(function () { el.remove(); }, 950);
+  }
+  function onMove(e) {
+    if (!body.classList.contains('chaos')) return;
+    var p = e.touches ? e.touches[0] : e;
+    sparkle(p.clientX, p.clientY);
+  }
+  window.addEventListener('mousemove', onMove, { passive: true });
+  window.addEventListener('touchmove', onMove, { passive: true });
+
+  // Visitor counter (this browser's visits, plus a very believable base)
+  var visits = 0;
+  try {
+    visits = parseInt(localStorage.getItem('utku-visits') || '0', 10) || 0;
+    visits += 1;
+    localStorage.setItem('utku-visits', String(visits));
+  } catch (e) { visits = 1; }
+  var digits = String(1337 + visits).padStart(6, '0');
+  var counter = document.getElementById('counter');
+  counter.setAttribute('aria-label', String(1337 + visits));
+  digits.split('').forEach(function (d) {
+    var b = document.createElement('b'); b.textContent = d; counter.appendChild(b);
+  });
+
+  function setChaos(on) {
+    body.classList.toggle('chaos', on);
+    toggle.textContent = on ? 'Turn off the chaos' : 'Bring back the chaos';
+    toggle.setAttribute('aria-pressed', on ? 'true' : 'false');
+    setMarquees(on);
+    on ? startTitle() : stopTitle();
+    try { localStorage.setItem('utku-chaos', on ? '1' : '0'); } catch (e) {}
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem('utku-chaos'); } catch (e) {}
+  var initial = saved === null ? !reduceMotion : saved === '1';
+  setChaos(initial);
+
+  toggle.addEventListener('click', function () { setChaos(!body.classList.contains('chaos')); });
+})();
+</script>
+</body>
+</html>
